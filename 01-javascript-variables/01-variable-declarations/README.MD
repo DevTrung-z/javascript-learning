@@ -245,11 +245,3 @@ console.log(i); // 3 ❌
 | const   | block    | ❌       | ⭐ Ưu tiên    |
 
 ---
-
-Nếu bạn muốn:
-
-* Tôi viết **README.md chuẩn cho module `variables`**
-* Hoặc **bài tập thực chiến về biến + scope**
-* Hoặc giải thích **memory, reference vs value** tiếp theo
-
-Chỉ nói 1 câu: **“tiếp theo là …”**
