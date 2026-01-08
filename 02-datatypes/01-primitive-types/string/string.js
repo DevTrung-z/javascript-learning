@@ -131,11 +131,22 @@ console.log(se.normalize("NFC"));//ế
 const n = 123;
 console.log(n.toString()); // 123
 
+// Lấy & xóa phần tử đầu mảng
+const first = arr.shift();
+
+console.log(first); // "a"
+
+// Lấy & xóa phần tử cuối mảng
+const last = arr.pop();
+
+console.log(last); // "d"
 
 //Tìm hiểu thêm các phương thức
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String
 console.log(lap.repeat(100));// xxxxx
 console.log("BAI TAP")
+
+
 
 // Bài toán
 // Người dùng nhập:
