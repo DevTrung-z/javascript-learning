@@ -127,7 +127,8 @@ const se = "ế";
 console.log(se.normalize("NFC"));//ế
 
 // toString() – chuyển sang string
-// 👉 Dùng khi ép kiểu an toàn.
+// 👉 Dùng khi ép kiểu an t
+// oàn.
 const n = 123;
 console.log(n.toString()); // 123
 
