@@ -48,68 +48,29 @@ console.log(person["name"]);
 
 ## Phương thức Object
 
-### Object.keys(obj)
+| Phương thức                         | Mô tả                                                     |
+| ----------------------------------- | --------------------------------------------------------- |
+| `Object.keys(obj)`                  | Trả về array các keys của object                          |
+| `Object.values(obj)`                | Trả về array các values của object                        |
+| `Object.entries(obj)`               | Trả về array các [key, value] pairs                       |
+| `Object.assign(target, ...sources)` | Copy properties từ sources vào target                     |
+| `Object.freeze(obj)`                | Ngăn chặn mọi thay đổi đối với object                     |
+| `Object.seal(obj)`                  | Cho phép thay đổi giá trị nhưng không thêm/xóa properties |
+| `Object.create(proto)`              | Tạo object với prototype chỉ định                         |
+| `Object.getPrototypeOf(obj)`        | Lấy prototype của object                                  |
+| `Object.setPrototypeOf(obj, proto)` | Đặt prototype cho object                                  |
+| `Object.is(obj1, obj2)`             | So sánh hai values (xử lý NaN và -0/+0)                   |
+| `Object.hasOwn(obj, prop)`          | Kiểm tra property riêng (ES2022)                          |
 
-Trả về array các keys của object.
+## Object Methods (instance methods)
 
-```javascript
-let keys = Object.keys(person); // ['name', 'age', 'city']
-```
-
-### Object.values(obj)
-
-Trả về array các values của object.
-
-```javascript
-let values = Object.values(person); // ['Bob', 30, 'New York']
-```
-
-### Object.entries(obj)
-
-Trả về array các [key, value] pairs.
-
-```javascript
-let entries = Object.entries(person);
-// [['name', 'Bob'], ['age', 30], ['city', 'New York']]
-```
-
-### Object.assign(target, ...sources)
-
-Copy properties từ sources vào target.
-
-```javascript
-let copy = Object.assign({}, person);
-let merged = Object.assign({}, obj1, obj2);
-```
-
-## Object Methods
-
-### hasOwnProperty(prop)
-
-Kiểm tra xem object có property riêng không.
-
-```javascript
-console.log(person.hasOwnProperty("name")); // true
-```
-
-### Object.freeze(obj)
-
-Ngăn chặn mọi thay đổi đối với object.
-
-```javascript
-let frozen = Object.freeze(person);
-// person.name = 'Charlie'; // Error in strict mode
-```
-
-### Object.seal(obj)
-
-Cho phép thay đổi giá trị nhưng không thêm/xóa properties.
-
-```javascript
-let sealed = Object.seal(person);
-person.age = 31; // OK
-// person.city = 'LA'; // Error
-```
+| Phương thức                  | Mô tả                                               |
+| ---------------------------- | --------------------------------------------------- |
+| `hasOwnProperty(prop)`       | Kiểm tra xem object có property riêng không         |
+| `isPrototypeOf(obj)`         | Kiểm tra xem object có phải prototype của obj không |
+| `propertyIsEnumerable(prop)` | Kiểm tra property có enumerable không               |
+| `toString()`                 | Trả về string biểu diễn object                      |
+| `valueOf()`                  | Trả về giá trị nguyên thủy của object               |
 
 ## Prototypes và Inheritance
 
@@ -173,35 +134,160 @@ Chuyển JSON string thành object.
 let obj = JSON.parse(json);
 ```
 
-## Ví dụ thực tế
+## Ví dụ chi tiết
+
+### Ví dụ cơ bản
 
 ```javascript
-// Tạo object đại diện cho sản phẩm
-let product = {
-  id: 1,
-  name: "Laptop",
-  price: 999,
-  category: "Electronics",
-  inStock: true,
-  specs: {
-    cpu: "Intel i7",
-    ram: "16GB",
-    storage: "512GB SSD",
-  },
-  getInfo: function () {
-    return `${this.name} - $${this.price}`;
+// Object literal
+let person = {
+  name: "Alice",
+  age: 30,
+  isStudent: false,
+};
+
+// Constructor
+let car = new Object();
+car.make = "Toyota";
+car.model = "Camry";
+
+// Truy cập properties
+console.log(person.name); // 'Alice'
+console.log(person["age"]); // 30
+
+// Thêm/sửa properties
+person.city = "New York";
+person.age = 31;
+```
+
+### Ví dụ với Object methods
+
+```javascript
+let person = { name: "Alice", age: 30, city: "New York" };
+
+// Object.keys
+let keys = Object.keys(person);
+console.log(keys); // ['name', 'age', 'city']
+
+// Object.values
+let values = Object.values(person);
+console.log(values); // ['Alice', 30, 'New York']
+
+// Object.entries
+let entries = Object.entries(person);
+console.log(entries); // [['name', 'Alice'], ['age', 30], ['city', 'New York']]
+
+// Object.assign
+let copy = Object.assign({}, person);
+let extended = Object.assign({}, person, { job: "Developer" });
+console.log(copy); // { name: 'Alice', age: 30, city: 'New York' }
+console.log(extended); // { name: 'Alice', age: 30, city: 'New York', job: 'Developer' }
+```
+
+### Ví dụ với freeze và seal
+
+```javascript
+let person = { name: "Alice", age: 30 };
+
+// Object.freeze - không thể thêm/sửa/xóa
+let frozen = Object.freeze(person);
+// frozen.name = 'Bob'; // Error in strict mode
+// frozen.city = 'LA'; // Error
+console.log(frozen); // { name: 'Alice', age: 30 }
+
+// Object.seal - có thể sửa nhưng không thêm/xóa
+let sealed = Object.seal({ name: "Bob", age: 25 });
+sealed.age = 26; // OK
+// sealed.city = 'LA'; // Error
+console.log(sealed); // { name: 'Bob', age: 26 }
+```
+
+### Ví dụ với Prototypes
+
+```javascript
+// Constructor function
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Person.prototype.greet = function () {
+  return `Hello, I'm ${this.name}`;
+};
+
+let alice = new Person("Alice", 30);
+console.log(alice.greet()); // 'Hello, I'm Alice'
+
+// Object.create
+let personProto = {
+  greet: function () {
+    return `Hello, I'm ${this.name}`;
   },
 };
 
-console.log(product.getInfo()); // 'Laptop - $999'
-console.log(product.specs.cpu); // 'Intel i7'
+let bob = Object.create(personProto);
+bob.name = "Bob";
+bob.age = 25;
+console.log(bob.greet()); // 'Hello, I'm Bob'
+```
 
-// Thêm method vào prototype
-Object.prototype.getType = function () {
-  return typeof this;
+### Ví dụ với Classes (ES6)
+
+```javascript
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet() {
+    return `Hello, I'm ${this.name} and I'm ${this.age} years old`;
+  }
+
+  static create(name, age) {
+    return new Person(name, age);
+  }
+}
+
+let alice = new Person("Alice", 30);
+console.log(alice.greet()); // 'Hello, I'm Alice and I'm 30 years old'
+
+let bob = Person.create("Bob", 25);
+console.log(bob.greet()); // 'Hello, I'm Bob and I'm 25 years old'
+```
+
+### Ví dụ với JSON
+
+```javascript
+let person = {
+  name: "Alice",
+  age: 30,
+  hobbies: ["reading", "coding"],
 };
 
-console.log(product.getType()); // 'object'
+// Serialize
+let jsonString = JSON.stringify(person);
+console.log(jsonString); // '{"name":"Alice","age":30,"hobbies":["reading","coding"]}'
+
+// Deserialize
+let parsedObject = JSON.parse(jsonString);
+console.log(parsedObject); // { name: 'Alice', age: 30, hobbies: ['reading', 'coding'] }
+```
+
+### Ví dụ với instance methods
+
+```javascript
+let person = { name: "Alice", age: 30 };
+
+// hasOwnProperty
+console.log(person.hasOwnProperty("name")); // true
+console.log(person.hasOwnProperty("toString")); // false (từ prototype)
+
+// toString
+console.log(person.toString()); // '[object Object]'
+
+// valueOf
+console.log(person.valueOf()); // { name: 'Alice', age: 30 }
 ```
 
 ## Lưu ý
