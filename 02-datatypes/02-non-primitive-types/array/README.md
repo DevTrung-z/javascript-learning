@@ -186,6 +186,175 @@ console.log(Array.isArray(numbers)); // true
 console.log(Array.isArray("not an array")); // false
 ```
 
+## Bài tập ứng dụng
+
+Dưới đây là một số bài tập thực tế sử dụng các phương thức Array, với giải thích chi tiết từng bước như một bài tập học tập.
+
+### Bài tập 1: Tính tổng các số dương
+
+**Mô tả:** Cho một mảng số nguyên, trả về tổng các phần tử dương (lớn hơn 0). Nếu mảng rỗng hoặc không có số dương, trả về 0.
+
+**Ví dụ:** input: `[-1, 3, 0, 4, -2]` → output: `7` (vì 3 + 4 = 7)
+
+**Giải pháp và giải thích:**
+
+```javascript
+const numbers = [-1, 3, 0, 4, -2];
+
+// Bước 1: Lọc ra các số dương (> 0) sử dụng filter()
+const positiveNumbers = numbers.filter((num) => num > 0);
+console.log(positiveNumbers); // [3, 4]
+
+// Bước 2: Tính tổng sử dụng reduce()
+const sum = positiveNumbers.reduce(
+  (accumulator, current) => accumulator + current,
+  0
+);
+console.log(sum); // 7
+
+// Giải pháp ngắn gọn hơn:
+const total = numbers
+  .filter((num) => num > 0)
+  .reduce((acc, curr) => acc + curr, 0);
+console.log(total); // 7
+```
+
+**Giải thích:**
+
+- `filter(num => num > 0)`: Duyệt qua từng phần tử, chỉ giữ lại những số > 0
+- `reduce((acc, curr) => acc + curr, 0)`: Cộng dồn các số từ trái sang phải, bắt đầu từ 0
+
+### Bài tập 2: Loại bỏ giá trị falsy
+
+**Mô tả:** Loại bỏ tất cả giá trị falsy (false, 0, "", null, undefined, NaN) khỏi mảng, giữ nguyên thứ tự các phần tử còn lại.
+
+**Ví dụ:** input: `[0, 1, false, 2, '', 3, null]` → output: `[1, 2, 3]`
+
+**Giải pháp và giải thích:**
+
+```javascript
+const mixedArray = [0, 1, false, 2, "", 3, null];
+
+// Cách 1: Sử dụng filter() với Boolean constructor
+const truthyValues = mixedArray.filter(Boolean);
+console.log(truthyValues); // [1, 2, 3]
+
+// Cách 2: Sử dụng filter() với callback rõ ràng
+const truthyValues2 = mixedArray.filter((item) => !!item);
+console.log(truthyValues2); // [1, 2, 3]
+
+// Cách 3: Sử dụng filter() với truthy check trực tiếp
+const truthyValues3 = mixedArray.filter((item) => item);
+console.log(truthyValues3); // [1, 2, 3]
+```
+
+**Giải thích:**
+
+- Giá trị falsy trong JavaScript: `false`, `0`, `""` (chuỗi rỗng), `null`, `undefined`, `NaN`
+- `filter(Boolean)`: `Boolean()` chuyển đổi mỗi phần tử thành boolean, filter giữ lại truthy
+- `!!item`: Double negation chuyển thành boolean rõ ràng
+- `item => item`: JavaScript tự động coi truthy là true trong context boolean
+
+### Bài tập 3: Tìm phần tử lớn nhất
+
+**Mô tả:** Tìm phần tử lớn nhất trong mảng số. Nếu mảng rỗng, trả về undefined.
+
+**Ví dụ:** input: `[3, 1, 4, 1, 5, 9, 2]` → output: `9`
+
+**Giải pháp và giải thích:**
+
+```javascript
+const numbers = [3, 1, 4, 1, 5, 9, 2];
+
+// Cách 1: Sử dụng Math.max() với spread operator
+const max1 = Math.max(...numbers);
+console.log(max1); // 9
+
+// Cách 2: Sử dụng reduce()
+const max2 = numbers.reduce(
+  (max, current) => (current > max ? current : max),
+  numbers[0]
+);
+console.log(max2); // 9
+
+// Cách 3: Sử dụng sort() (không khuyến khích cho hiệu suất)
+const max3 = [...numbers].sort((a, b) => b - a)[0];
+console.log(max3); // 9
+```
+
+**Giải thích:**
+
+- `Math.max(...numbers)`: Spread operator mở rộng array thành các argument riêng lẻ
+- `reduce()`: So sánh từng phần tử với giá trị max hiện tại, cập nhật nếu lớn hơn
+- `sort((a, b) => b - a)`: Sắp xếp giảm dần, phần tử đầu tiên là lớn nhất
+
+### Bài tập 4: Đếm số lần xuất hiện của mỗi phần tử
+
+**Mô tả:** Tạo một object đếm số lần xuất hiện của mỗi phần tử trong mảng.
+
+**Ví dụ:** input: `['a', 'b', 'a', 'c', 'a', 'b']` → output: `{a: 3, b: 2, c: 1}`
+
+**Giải pháp và giải thích:**
+
+```javascript
+const items = ["a", "b", "a", "c", "a", "b"];
+
+// Sử dụng reduce() để tạo object đếm
+const count = items.reduce((accumulator, current) => {
+  // Nếu phần tử chưa có trong accumulator, khởi tạo bằng 1
+  // Nếu đã có, tăng lên 1
+  accumulator[current] = (accumulator[current] || 0) + 1;
+  return accumulator;
+}, {});
+
+console.log(count); // {a: 3, b: 2, c: 1}
+```
+
+**Giải thích:**
+
+- `reduce()` bắt đầu với object rỗng `{}`
+- Với mỗi phần tử, kiểm tra xem đã có trong object chưa
+- Nếu chưa có, gán bằng 1; nếu có rồi, tăng lên 1
+- `accumulator[current] || 0`: Nếu undefined, dùng 0, rồi +1
+
+### Bài tập 5: Làm phẳng mảng đa chiều
+
+**Mô tả:** Làm phẳng một mảng đa chiều thành mảng một chiều.
+
+**Ví dụ:** input: `[1, [2, [3, 4]], 5]` → output: `[1, 2, 3, 4, 5]`
+
+**Giải pháp và giải thích:**
+
+```javascript
+const nested = [1, [2, [3, 4]], 5];
+
+// Cách 1: Sử dụng flat() với Infinity
+const flat1 = nested.flat(Infinity);
+console.log(flat1); // [1, 2, 3, 4, 5]
+
+// Cách 2: Sử dụng reduce() và đệ quy
+function flattenArray(arr) {
+  return arr.reduce((flat, item) => {
+    return flat.concat(Array.isArray(item) ? flattenArray(item) : item);
+  }, []);
+}
+
+const flat2 = flattenArray(nested);
+console.log(flat2); // [1, 2, 3, 4, 5]
+
+// Cách 3: Sử dụng JSON và regex (không khuyến khích)
+const flat3 = JSON.parse(
+  "[" + JSON.stringify(nested).replace(/\[|\]/g, "") + "]"
+);
+console.log(flat3); // [1, 2, 3, 4, 5]
+```
+
+**Giải thích:**
+
+- `flat(Infinity)`: Làm phẳng tất cả các cấp độ lồng nhau
+- Hàm `flattenArray`: Sử dụng reduce, nếu item là array thì đệ quy, ngược lại concat trực tiếp
+- Cách JSON: Chuyển thành string, loại bỏ `[` và `]`, rồi parse lại (có thể lỗi với object phức tạp)
+
 ## Lưu ý
 
 - Array trong JavaScript có thể chứa các kiểu dữ liệu khác nhau.
